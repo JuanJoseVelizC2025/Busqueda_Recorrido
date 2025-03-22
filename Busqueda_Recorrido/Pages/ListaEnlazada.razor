@@ -1,0 +1,65 @@
+﻿@page "/lista-enlazada"
+@using EmptyBlazorApp1.Models
+
+<h3>Lista Enlazada</h3>
+
+<div>
+    <input type="number" @bind="newValue" placeholder="Ingrese un valor" />
+    <button @onclick="AgregarElemento">Agregar</button>
+</div>
+
+<h4>Recorrido Recursivo</h4>
+<button @onclick="RecorrerLista">Mostrar Lista</button>
+<ul>
+    @foreach (var item in listaValores)
+    {
+        <li>@item</li>
+    }
+</ul>
+
+<h4>Búsqueda Recursiva</h4>
+<input type="number" @bind="buscarValor" placeholder="Buscar valor" />
+<button @onclick="BuscarElemento">Buscar</button>
+<p>@mensajeBusqueda</p>
+
+@code {
+    private LinkedList lista = new();
+    private int newValue;
+    private int buscarValor;
+    private List<int> listaValores = new();
+    private string mensajeBusqueda = "";
+
+    private void AgregarElemento()
+    {
+        lista.Agregar(newValue);
+        newValue = 0; // Resetear input
+        StateHasChanged(); // Actualizar la UI
+    }
+
+    private void RecorrerLista()
+    {
+        listaValores = lista.RecorridoRecursivo(lista.PrimerNodo);
+        Console.WriteLine($"Se agregó: {newValue}"); // Verifica que se agrega correctamente
+        newValue = 0;
+        StateHasChanged();
+    }
+
+    /*private void BuscarElemento()
+    {
+        bool encontrado = lista.BusquedaRecursiva(lista.PrimerNodo, buscarValor);
+        mensajeBusqueda = encontrado ? "Elemento encontrado." : "Elemento no encontrado.";
+        StateHasChanged();
+    }*/
+    private void BuscarElemento()
+        {
+    if (lista.PrimerNodo == null)
+    {
+        mensajeBusqueda = "La lista está vacía.";
+        return;
+    }
+
+    bool encontrado = lista.BusquedaRecursiva(lista.PrimerNodo, buscarValor);
+    mensajeBusqueda = encontrado ? "Elemento encontrado." : "Elemento no encontrado.";
+    StateHasChanged();
+        }
+}
